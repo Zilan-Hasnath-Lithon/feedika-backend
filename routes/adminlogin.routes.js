@@ -5,6 +5,7 @@ import { tokenCheck } from '../middleware/middleware.js';
 
 const router = express.Router();
 
+// Admin login
 router.post("/adminlogin", async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -14,13 +15,21 @@ router.post("/adminlogin", async (req, res) => {
 
         const token = jwt.sign({ id: admin._id }, process.env.SECRETid, { expiresIn: '1h' });
 
-        res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
+        // Cross-site cookie for Vercel + Render
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 60 * 60 * 1000
+        });
+
         res.status(200).json({ message: "Admin login successful" });
     } catch (err) {
         res.status(500).json({ message: "Server error" });
     }
 });
 
+// Admin verify
 router.get("/check", tokenCheck, async (req, res) => {
     try {
         const admin = await Admin.findById(req.userId);
