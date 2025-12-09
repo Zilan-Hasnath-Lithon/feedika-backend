@@ -22,8 +22,8 @@ app.use(cookieParser());
 
 // CORS - allow both localhost and Vercel frontend
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://feedika.vercel.app'],
-    credentials: true
+    origin: ['http://localhost:5173', 'https://feedika.vercel.app'], // frontend URLs
+    credentials: true // important to send cookies
 }));
 
 // Routes
@@ -33,7 +33,7 @@ app.use('/api/signup', Signup);
 app.use('/api/youtube', Youtube);
 app.use('/api/facebook', Facebook);
 app.use('/api/tiktok', Tiktok);
-app.use('/api/admin', AdminLogin);
+app.use('/api/admin', AdminLogin); // make sure admin login sets cookies correctly
 app.use('/api/feedmaker', FeedMakerRoute);
 app.use('/api/home', Home);
 
